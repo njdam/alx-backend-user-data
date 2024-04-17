@@ -1,40 +1,42 @@
-# Basic Authentication (Back-end Authentication)
+# Simple API
 
-This directory demonstrates the implementation of Basic Authentication for back-end services.
+Simple HTTP API for playing with `User` model.
 
-## Overview
 
-Basic Authentication is a simple authentication mechanism where the user's credentials (username and password) are sent as plaintext in the HTTP request headers. While it is straightforward to implement, it is not considered secure for transmitting sensitive information over the internet due to its lack of encryption.
+## Files
 
-This repository provides a basic implementation of Basic Authentication using [insert technology/framework/library here].
+### `models/`
 
-## Features
+- `base.py`: base of all models of the API - handle serialization to file
+- `user.py`: user model
 
-- User registration: Allows users to create an account by providing a username and password.
-- User authentication: Authenticates users using their username and password.
-- Protected routes: Restricts access to certain routes or endpoints based on user authentication status.
+### `api/v1`
 
-## Technologies Used
+- `app.py`: entry point of the API
+- `views/index.py`: basic endpoints of the API: `/status` and `/stats`
+- `views/users.py`: all users endpoints
 
-- [Technology/Framework/Library 1]: Describe its role and how it contributes to implementing Basic Authentication.
-- [Technology/Framework/Library 2]: Describe its role and how it contributes to implementing Basic Authentication.
-- [Technology/Framework/Library 3]: Describe its role and how it contributes to implementing Basic Authentication.
 
-## Getting Started
+## Setup
 
-To get started with this project, follow these steps:
+```
+$ pip3 install -r requirements.txt
+```
 
-1. Clone this repository to your local machine.
-2. Install the necessary dependencies using [insert package manager/command here].
-3. Configure the environment variables required for the application (e.g., database connection string, secret key).
-4. Run the application using [insert command here].
-5. Access the application in your browser or test the endpoints using an API testing tool like Postman.
 
-## Usage
+## Run
 
-Describe how to use the implemented Basic Authentication features, such as:
+```
+$ API_HOST=0.0.0.0 API_PORT=5000 python3 -m api.v1.app
+```
 
-- Registering a new user account.
-- Logging in with an existing user account.
-- Accessing protected routes or endpoints.
-- Logging out of the application.
+
+## Routes
+
+- `GET /api/v1/status`: returns the status of the API
+- `GET /api/v1/stats`: returns some stats of the API
+- `GET /api/v1/users`: returns the list of users
+- `GET /api/v1/users/:id`: returns an user based on the ID
+- `DELETE /api/v1/users/:id`: deletes an user based on the ID
+- `POST /api/v1/users`: creates a new user (JSON parameters: `email`, `password`, `last_name` (optional) and `first_name` (optional))
+- `PUT /api/v1/users/:id`: updates an user based on the ID (JSON parameters: `last_name` and `first_name`)
