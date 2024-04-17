@@ -16,13 +16,28 @@ class BasicAuth(Auth):
     def extract_base64_authorization_header(
             self, authorization_header: str
             ) -> str:
-        """
-        "Extracts the Base64 part of the Authorization header
-        for a Basic Authentication.
+        """ Extracts the Base64 part of the Authorization header for a Basic
+        Authentication!
         """
         if type(authorization_header) == str:
             pattern = r'Basic (?P<token>.+)'
             matched = re.fullmatch(pattern, authorization_header.strip())
             if matched:
                 return matched.group('token')
+        return None
+
+    def decode_base64_authorization_header(
+            self, base64_authorization_header: str
+            ) -> str:
+        """ Decode Base64 string to return decoded value
+        """
+        if type(base64_authorization_header) == str:
+            try:
+                decoded = base64.b64decode(
+                        base64_authorization_header,
+                        validate=True
+                        )
+                return decoded.decode('utf-8')
+            except (binascii.Error, UnicodeDecodeError):
+                return None
         return None
