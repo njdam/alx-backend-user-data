@@ -39,7 +39,7 @@ def login() -> Tuple[str, int]:
 
 
 @app_views.route(
-        '/api/v1/auth_session/logout', methods=['DELETE'], strict_slashes=False
+        '/auth_session/logout', methods=['DELETE'], strict_slashes=False
         )
 def logout() -> Tuple[str, int]:
     """ Deleting the Session ID contains in the request as cookie
