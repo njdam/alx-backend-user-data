@@ -5,6 +5,7 @@
 from uuid import uuid4
 
 from api.v1.auth.auth import Auth
+from models.user import User
 
 
 class SessionAuth(Auth):
@@ -26,4 +27,14 @@ class SessionAuth(Auth):
         """
         if type(session_id) is str:
             return self.user_id_by_session_id.get(session_id)
+        return None
+
+    def current_user(self, request=None):
+        """ An instance method that returns a User instance based on
+        a cookie value
+        """
+        if request is not None:
+            _my_session_id = self.session_cookie(request)
+            user_id = self.user_id_for_session_id(_my_session_id)
+            return User.get(user_id)
         return None
