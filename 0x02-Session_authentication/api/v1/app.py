@@ -46,7 +46,7 @@ def forbiddedn(error) -> str:
 
 @app.before_request
 def authenticate_user():
-    """
+    """ Authonticating user
     """
     if auth:
         excluded_paths = [
@@ -61,6 +61,7 @@ def authenticate_user():
                 abort(401)
             if user is None:
                 abort(403)
+            request.current_user = user
 
 
 if __name__ == "__main__":
