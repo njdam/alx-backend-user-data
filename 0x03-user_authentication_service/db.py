@@ -5,6 +5,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
+from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import InvalidRequestError
 
 from user import Base, User
 
@@ -50,3 +52,24 @@ class DB:
             self._session.rollback()
             new_user = None
         return new_user
+
+    def find_user_by(self, **kwargs) -> User:
+        """Find a user by the given keyword arguments
+
+        Args:
+            **kwargs: Arbitrary keyword arguments for filtering the user
+
+        Returns:
+            User: The first user found matching the provided criteria
+
+        Raises:
+            NoResultFound: If no user is found matching the criteria
+            InvalidRequestError: If wrong query arguments are passed
+        """
+        try:
+            user = self._session.query(User).filter_by(**kwargs).first()
+            if user is None:
+                raise NoResultFound
+            return user
+        except InvalidRequestError:
+            raise
