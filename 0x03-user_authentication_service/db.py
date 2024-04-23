@@ -88,6 +88,8 @@ class DB:
         """
         try:
             user = self.find_user_by(id=user_id)
+            if user is None:
+                return
             for key, value in kwargs.items():
                 if hasattr(User, key):
                     setattr(user, key, value)
