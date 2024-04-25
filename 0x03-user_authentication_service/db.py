@@ -74,7 +74,7 @@ class DB:
         except InvalidRequestError:
             raise
 
-    def update_user(self, user_id: int, **kwargs) -> User:
+    def update_user(self, user_id: int, **kwargs) -> None:
         """ Update a user's attributes
 
         Args:
@@ -86,17 +86,13 @@ class DB:
             ValueError: If an argument that does not correspond to a user
             attribute is passed
         """
-        user = self.find_user_by(id=user_id)
-        if user is None:
-            return
-        updates = {}
-        for key, value in kwargs.items():
-            if hasattr(User, key):
-                updates[getattr(User, key)] = value
-            else:
-                raise ValueError()
-        self._session.query(User).filter(User.id == user_id).update(
-            updates,
-            synchronize_session=False,
-        )
-        self._session.commit()
+        try:
+            user = self.find_user_by(id=user_id)
+            for key, value in kwargs.items():
+                if hasattr(User, key):
+                    setattr(user, key, value)
+                else:
+                    raise ValueError(f"Invalid attribute '{key}'")
+            self._session.commit()
+        except (InvalidRequestError, NoResultFound):
+            raise
