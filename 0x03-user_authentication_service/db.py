@@ -86,16 +86,17 @@ class DB:
             ValueError: If an argument that does not correspond to a user
             attribute is passed
         """
-        try:
-            user = self.find_user_by(id=user_id)
-            if user is None:
-                return
-            for key, value in kwargs.items():
-                if hasattr(User, key):
-                    setattr(user, key, value)
-                else:
-                    raise ValueError(f'Invalid attribute {key}')
-            self._session.commit()
-        except (InvalidRequestError, NoResultFound):
-            # For find_user_by Exceptions
-            raise
+        user = self.find_user_by(id=user_id)
+        if user is None:
+            return
+        updates = {}
+        for key, value in kwargs.items():
+            if hasattr(User, key):
+                updates[getattr(User, key)] = value
+            else:
+                raise ValueError()
+        self._session.query(User).filter(User.id == user_id).update(
+            updates,
+            synchronize_session=False,
+        )
+        self._session.commit()
