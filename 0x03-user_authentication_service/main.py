@@ -42,7 +42,7 @@ try:
 except InvalidRequestError:
     print("Invalid")
 
-print('---------Task 2--------')
+print('---------Task 3--------')
 email = 'test@test.com'
 hashed_password = "hashedPwd"
 
@@ -54,3 +54,8 @@ try:
     print("Password updated")
 except ValueError:
     print("Error")
+
+print('---------Task 4--------')
+from auth import _hash_password
+
+print(_hash_password("Hello Holberton"))
